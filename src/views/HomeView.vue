@@ -1,14 +1,20 @@
 <script setup lang="ts">
 /**
- * 首页占位（阶段 0）
- * 用于验证 Vue Router + PrimeVue 装配是否正常。
+ * 首页
+ *
+ * 职责：展示帖子信息流（分类筛选、搜索、分页）。
+ * 阶段 3 接入 DataView 与 services；当前为骨架占位。
  */
 </script>
 
 <template>
-  <main class="page-container stack-md">
-    <h1>PickCat 社区</h1>
-    <p class="muted">Vue 3 + PrimeVue（Aura）脚手架已就绪。</p>
-    <Button label="PrimeVue Button" icon="pi pi-check" />
-  </main>
+  <section class="stack-md">
+    <header class="stack-sm">
+      <h1>社区动态</h1>
+      <p class="muted">浏览最新帖子，按分类筛选或搜索关键词。</p>
+    </header>
+    <Message severity="info" :closable="false">
+      信息流将在下一阶段接入 Mock 数据。
+    </Message>
+  </section>
 </template>
