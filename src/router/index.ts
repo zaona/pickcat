@@ -19,6 +19,12 @@ export const router = createRouter({
           meta: { title: '首页' },
         },
         {
+          path: 'search',
+          name: 'search',
+          component: () => import('@/views/SearchView.vue'),
+          meta: { title: '搜索' },
+        },
+        {
           path: 'posts/new',
           name: 'post-create',
           component: () => import('@/views/PostCreateView.vue'),
@@ -29,6 +35,18 @@ export const router = createRouter({
           name: 'post-detail',
           component: () => import('@/views/PostDetailView.vue'),
           meta: { title: '帖子详情' },
+        },
+        {
+          path: 'notifications',
+          name: 'notifications',
+          component: () => import('@/views/NotificationsView.vue'),
+          meta: { title: '消息中心' },
+        },
+        {
+          path: 'bookmarks',
+          name: 'bookmarks',
+          component: () => import('@/views/BookmarksView.vue'),
+          meta: { title: '我的收藏' },
         },
         {
           path: 'users/:id',
@@ -51,6 +69,6 @@ export const router = createRouter({
 })
 
 router.afterEach((to) => {
-  const title = (to.meta.title as string | undefined) ?? 'PickCat'
-  document.title = `${title} · PickCat 社区`
+  const title = (to.meta.title as string | undefined) ?? 'PICKCAT'
+  document.title = `${title} · PICKCAT 社区`
 })

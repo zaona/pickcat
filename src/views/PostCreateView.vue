@@ -87,9 +87,8 @@ async function submit() {
 
 <template>
   <section class="stack-md">
-    <header class="stack-sm">
+    <header class="page-title">
       <h1>发布帖子</h1>
-      <p class="muted">分享你的想法或问题。</p>
     </header>
 
     <div v-if="!auth.currentUser" class="stack-sm">

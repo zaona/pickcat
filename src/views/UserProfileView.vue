@@ -2,7 +2,7 @@
 /**
  * 用户主页
  *
- * 展示用户资料及其发帖列表。
+ * 桌面：左用户信息 + 右帖子列表；移动端上下堆叠。
  */
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -58,41 +58,51 @@ watch(userId, () => void load(), { immediate: true })
 
 <template>
   <section class="stack-md">
-    <div v-if="loading" class="stack-md">
-      <Skeleton width="40%" height="2rem" />
-      <Skeleton width="70%" height="1rem" />
-      <Skeleton width="100%" height="6rem" />
+    <div v-if="loading" class="profile-layout">
+      <div class="profile-aside stack-md">
+        <Skeleton width="100%" height="10rem" />
+      </div>
+      <div class="profile-main stack-md">
+        <Skeleton width="100%" height="6rem" />
+        <Skeleton width="100%" height="6rem" />
+      </div>
     </div>
 
     <div v-else-if="!user" class="stack-sm">
       <Message severity="error" :closable="false">未找到该用户。</Message>
-      <Button label="返回首页" icon="pi pi-home" @click="router.push({ name: 'home' })" />
+      <Button
+        label="返回首页"
+        icon="pi pi-home"
+        @click="router.push({ name: 'home' })"
+      />
     </div>
 
-    <template v-else>
-      <Card>
-        <template #title>
-          <div class="row">
-            <Avatar
-              :label="user.displayName.slice(0, 1)"
-              shape="circle"
-              size="large"
-            />
-            <div class="stack-sm" style="gap: 0.25rem">
-              <span>{{ user.displayName }}</span>
-              <span class="muted">@{{ user.username }}</span>
+    <div v-else class="profile-layout">
+      <!-- 左侧：用户信息 -->
+      <aside class="profile-aside">
+        <Card>
+          <template #title>
+            <div class="stack-sm" style="align-items: flex-start">
+              <Avatar
+                :label="user.displayName.slice(0, 1)"
+                shape="circle"
+                size="xlarge"
+              />
+              <div class="stack-sm" style="gap: 0.25rem">
+                <span>{{ user.displayName }}</span>
+                <span class="muted">@{{ user.username }}</span>
+              </div>
             </div>
-          </div>
-        </template>
-        <template #content>
-          <p style="margin: 0 0 0.75rem">{{ user.bio }}</p>
-          <p class="muted" style="margin: 0">加入于 {{ joinedLabel }}</p>
-        </template>
-      </Card>
+          </template>
+          <template #content>
+            <p style="margin: 0 0 0.75rem">{{ user.bio }}</p>
+            <p class="muted" style="margin: 0">加入于 {{ joinedLabel }}</p>
+          </template>
+        </Card>
+      </aside>
 
-      <section class="stack-md">
-        <h2 style="margin: 0; font-size: 1.25rem">TA 的帖子</h2>
-
+      <!-- 右侧：帖子列表 -->
+      <div class="profile-main stack-md">
         <Message
           v-if="posts.length === 0"
           severity="secondary"
@@ -101,14 +111,16 @@ watch(userId, () => void load(), { immediate: true })
           还没有发布过帖子。
         </Message>
 
-        <PostListItem
-          v-for="post in posts"
-          :key="post.id"
-          :post="post"
-          :author="user"
-          :category="categoryMap.get(post.categoryId)"
-        />
-      </section>
-    </template>
+        <div v-else class="post-list">
+          <PostListItem
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+            :author="user"
+            :category="categoryMap.get(post.categoryId)"
+          />
+        </div>
+      </div>
+    </div>
   </section>
 </template>

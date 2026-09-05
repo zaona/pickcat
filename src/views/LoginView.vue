@@ -63,9 +63,8 @@ function logout() {
 
 <template>
   <section class="stack-md">
-    <header class="stack-sm">
+    <header class="page-title">
       <h1>登录</h1>
-      <p class="muted">本项目为 Mock 登录：选择一个演示用户即可，无真实鉴权。</p>
     </header>
 
     <Message severity="info" :closable="false">
