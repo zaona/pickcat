@@ -27,6 +27,9 @@ import Search2Regular from '@mingcute/vue/core-regular/search-2'
 import SendPlaneRegular from '@mingcute/vue/core-regular/send-plane'
 import Share2Regular from '@mingcute/vue/core-regular/share-2'
 import User2Regular from '@mingcute/vue/core-regular/user-2'
+import UserAddRegular from '@mingcute/vue/core-regular/user-add'
+import UserFollowRegular from '@mingcute/vue/core-regular/user-follow'
+import UserRemoveRegular from '@mingcute/vue/core-regular/user-remove'
 
 import AddFilled from '@mingcute/vue/core-filled/add'
 import BookmarkFilled from '@mingcute/vue/core-filled/bookmark'
@@ -44,6 +47,9 @@ export type IconName =
   | 'bell'
   | 'user'
   | 'userFilled'
+  | 'userAdd'
+  | 'userFollow'
+  | 'userRemove'
   | 'plus'
   | 'plusFilled'
   | 'heart'
@@ -86,6 +92,9 @@ export const iconRegistry: Record<IconName, IconComponent> = {
   bell: NotificationRegular,
   user: User2Regular,
   userFilled: User2Filled,
+  userAdd: UserAddRegular,
+  userFollow: UserFollowRegular,
+  userRemove: UserRemoveRegular,
   plus: AddRegular,
   plusFilled: AddFilled,
   heart: HeartRegular,

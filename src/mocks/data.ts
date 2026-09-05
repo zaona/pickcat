@@ -4,7 +4,14 @@
  * 仅作为内存 Store 的初始快照；运行期变更不会写回本文件。
  * 扩展数据时请保持 id 唯一，时间字段使用 ISO 8601。
  */
-import type { Category, Comment, Notification, Post, User } from '@/types'
+import type {
+  Category,
+  Comment,
+  FollowEdge,
+  Notification,
+  Post,
+  User,
+} from '@/types'
 
 export const seedUsers: User[] = [
   {
@@ -357,5 +364,44 @@ export const seedNotifications: Notification[] = [
     actorId: null,
     read: false,
     createdAt: '2026-09-05T01:00:00.000Z',
+  },
+]
+
+/** 种子关注关系 */
+export const seedFollows: FollowEdge[] = [
+  {
+    followerId: 'u1',
+    followingId: 'u2',
+    createdAt: '2026-03-01T10:00:00.000Z',
+  },
+  {
+    followerId: 'u1',
+    followingId: 'u4',
+    createdAt: '2026-04-12T08:20:00.000Z',
+  },
+  {
+    followerId: 'u2',
+    followingId: 'u1',
+    createdAt: '2026-03-02T11:00:00.000Z',
+  },
+  {
+    followerId: 'u3',
+    followingId: 'u1',
+    createdAt: '2026-05-18T09:30:00.000Z',
+  },
+  {
+    followerId: 'u3',
+    followingId: 'u2',
+    createdAt: '2026-06-01T14:00:00.000Z',
+  },
+  {
+    followerId: 'u4',
+    followingId: 'u1',
+    createdAt: '2026-07-08T16:45:00.000Z',
+  },
+  {
+    followerId: 'u4',
+    followingId: 'u3',
+    createdAt: '2026-08-10T07:15:00.000Z',
   },
 ]

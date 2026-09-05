@@ -41,18 +41,42 @@
 - 归属：`postId` / `authorId`
 - `parentId`：`null` 为一级评论，非空表示回复某条评论（MVP 展示为一层回复）
 
+### FollowEdge（关注关系）
+
+- `followerId` / `followingId` / `createdAt`
+- 种子见 `seedFollows`；会话内 `toggleFollow` 可增删
+
+### UserProfileDetail（个人主页聚合）
+
+由 `fetchUserProfile(userId)` / `mockStore.getUserProfile` 计算返回：
+
+- `stats`：`postCount`、`likeReceivedCount`（帖子赞+评论赞）、`followerCount`、`followingCount`
+- `following`：当前登录用户是否已关注该主页用户
+- `heatmap`：近约一年按日活跃计数（发帖、评论、关注各 +1；获赞按实体创建日有限叠加）
+- `activities`：动态时间线（发帖 / 评论 / 获赞摘要 / 关注他人）
+
 ## 常用服务方法
 
 ```ts
 import { fetchPosts, fetchPostById, createPost, togglePostLike } from '@/services'
 import { fetchCommentsByPost, createComment } from '@/services'
-import { fetchUsers, fetchUserById } from '@/services'
+import {
+  fetchUsers,
+  fetchUserById,
+  fetchUserProfile,
+  toggleFollow,
+  fetchFollowers,
+  fetchFollowing,
+} from '@/services'
 import { fetchCategories } from '@/services'
 ```
 
 - `fetchPosts({ categoryId, keyword, page, pageSize, authorId })` → 分页列表
 - `togglePostLike(postId)` → `{ post, liked }`，同一帖再次调用取消赞
 - `createComment({ postId, authorId, content, parentId? })` → 新建评论并递增帖子 `commentCount`
+- `fetchUserProfile(userId)` → 个人中心聚合（含热力图与动态）
+- `toggleFollow(targetUserId)` → 关注/取消关注（需登录）
+- `fetchFollowers` / `fetchFollowing` → 粉丝与正在关注列表
 
 ## 如何扩展种子数据
 
@@ -60,6 +84,7 @@ import { fetchCategories } from '@/services'
 2. 保证各类 `id` 全局唯一
 3. 时间字段使用 ISO 8601（例如 `2026-09-05T02:00:00.000Z`）
 4. 帖子的 `commentCount` 应与该帖在 `seedComments` 中的条数一致
+5. 关注边追加到 `seedFollows`，勿出现自己关注自己
 
 ## 如何替换为真实 API
 

@@ -9,6 +9,7 @@
 import {
   seedCategories,
   seedComments,
+  seedFollows,
   seedNotifications,
   seedPosts,
   seedUsers,
@@ -17,12 +18,17 @@ import type {
   Category,
   Comment,
   CommentInput,
+  FollowEdge,
+  HeatmapDay,
   Notification,
   Paginated,
   Post,
   PostInput,
   PostListQuery,
   User,
+  UserActivity,
+  UserProfileDetail,
+  UserProfileStats,
 } from '@/types'
 
 function clone<T>(value: T): T {
@@ -71,12 +77,149 @@ const db = {
   posts: clone(seedPosts),
   comments: clone(seedComments),
   notifications: clone(seedNotifications),
+  follows: clone(seedFollows) as FollowEdge[],
   /** 当前会话已点赞的帖子 id（Mock 简化：不按用户分区） */
   likedPostIds: new Set<string>(),
   /** 当前会话已点赞的评论 id */
   likedCommentIds: new Set<string>(),
   /** 用户收藏：userId -> postId 集合 */
   bookmarkedByUser: new Map<string, Set<string>>(),
+}
+
+function toDateKey(iso: string) {
+  return iso.slice(0, 10)
+}
+
+function buildHeatmapForUser(userId: string): HeatmapDay[] {
+  const counts = new Map<string, number>()
+
+  const bump = (iso: string, amount = 1) => {
+    const key = toDateKey(iso)
+    counts.set(key, (counts.get(key) ?? 0) + amount)
+  }
+
+  db.posts
+    .filter((post) => post.authorId === userId)
+    .forEach((post) => {
+      bump(post.createdAt, 1)
+      if (post.likeCount > 0) bump(post.createdAt, Math.min(post.likeCount, 8))
+    })
+
+  db.comments
+    .filter((comment) => comment.authorId === userId)
+    .forEach((comment) => {
+      bump(comment.createdAt, 1)
+      if (comment.likeCount > 0) {
+        bump(comment.createdAt, Math.min(comment.likeCount, 5))
+      }
+    })
+
+  db.follows
+    .filter((edge) => edge.followerId === userId)
+    .forEach((edge) => bump(edge.createdAt, 1))
+
+  const days: HeatmapDay[] = []
+  const end = new Date()
+  end.setHours(12, 0, 0, 0)
+  // 对齐到本周周日结束的约 53 周格子（含今天）
+  const endDay = end.getDay()
+  const start = new Date(end)
+  start.setDate(start.getDate() - endDay - 52 * 7)
+
+  for (let cursor = new Date(start); cursor <= end; cursor.setDate(cursor.getDate() + 1)) {
+    const key = cursor.toISOString().slice(0, 10)
+    days.push({ date: key, count: counts.get(key) ?? 0 })
+  }
+  return days
+}
+
+function buildActivitiesForUser(userId: string): UserActivity[] {
+  const activities: UserActivity[] = []
+
+  db.posts
+    .filter((post) => post.authorId === userId)
+    .forEach((post) => {
+      activities.push({
+        id: `act_post_${post.id}`,
+        userId,
+        type: 'post',
+        createdAt: post.createdAt,
+        title: '发布了帖子',
+        body: post.title,
+        postId: post.id,
+      })
+      if (post.likeCount > 0) {
+        activities.push({
+          id: `act_like_post_${post.id}`,
+          userId,
+          type: 'like_received',
+          createdAt: post.updatedAt,
+          title: `帖子获得 ${post.likeCount} 个赞`,
+          body: post.title,
+          postId: post.id,
+        })
+      }
+    })
+
+  db.comments
+    .filter((comment) => comment.authorId === userId)
+    .forEach((comment) => {
+      const post = db.posts.find((item) => item.id === comment.postId)
+      activities.push({
+        id: `act_cm_${comment.id}`,
+        userId,
+        type: 'comment',
+        createdAt: comment.createdAt,
+        title: comment.parentId ? '回复了评论' : '发表了评论',
+        body: comment.content.slice(0, 80),
+        postId: comment.postId,
+      })
+      if (comment.likeCount > 0) {
+        activities.push({
+          id: `act_like_cm_${comment.id}`,
+          userId,
+          type: 'like_received',
+          createdAt: comment.createdAt,
+          title: `评论获得 ${comment.likeCount} 个赞`,
+          body: post ? `在「${post.title}」下` : comment.content.slice(0, 60),
+          postId: comment.postId,
+        })
+      }
+    })
+
+  db.follows
+    .filter((edge) => edge.followerId === userId)
+    .forEach((edge) => {
+      const target = db.users.find((user) => user.id === edge.followingId)
+      activities.push({
+        id: `act_follow_${edge.followerId}_${edge.followingId}_${edge.createdAt}`,
+        userId,
+        type: 'follow',
+        createdAt: edge.createdAt,
+        title: '关注了用户',
+        body: target ? `${target.displayName} @${target.username}` : edge.followingId,
+        targetUserId: edge.followingId,
+      })
+    })
+
+  return activities.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )
+}
+
+function statsForUser(userId: string): UserProfileStats {
+  const posts = db.posts.filter((post) => post.authorId === userId)
+  const comments = db.comments.filter((comment) => comment.authorId === userId)
+  const likeReceivedCount =
+    posts.reduce((sum, post) => sum + post.likeCount, 0) +
+    comments.reduce((sum, comment) => sum + comment.likeCount, 0)
+
+  return {
+    postCount: posts.length,
+    likeReceivedCount,
+    followerCount: db.follows.filter((edge) => edge.followingId === userId).length,
+    followingCount: db.follows.filter((edge) => edge.followerId === userId).length,
+  }
 }
 
 export const mockStore = {
@@ -103,6 +246,86 @@ export const mockStore = {
   getUser(id: string): User | undefined {
     const user = db.users.find((item) => item.id === id)
     return user ? clone(user) : undefined
+  },
+
+  getUserProfile(
+    userId: string,
+    viewerId?: string | null,
+  ): UserProfileDetail | undefined {
+    const user = db.users.find((item) => item.id === userId)
+    if (!user) return undefined
+
+    const following = Boolean(
+      viewerId &&
+        viewerId !== userId &&
+        db.follows.some(
+          (edge) => edge.followerId === viewerId && edge.followingId === userId,
+        ),
+    )
+
+    return {
+      user: clone(user),
+      stats: statsForUser(userId),
+      following,
+      heatmap: buildHeatmapForUser(userId),
+      activities: buildActivitiesForUser(userId),
+    }
+  },
+
+  isFollowing(followerId: string, followingId: string): boolean {
+    return db.follows.some(
+      (edge) =>
+        edge.followerId === followerId && edge.followingId === followingId,
+    )
+  },
+
+  toggleFollow(
+    actorId: string,
+    targetId: string,
+  ): { following: boolean; stats: UserProfileStats } | undefined {
+    if (actorId === targetId) return undefined
+    const target = db.users.find((user) => user.id === targetId)
+    const actor = db.users.find((user) => user.id === actorId)
+    if (!target || !actor) return undefined
+
+    const index = db.follows.findIndex(
+      (edge) => edge.followerId === actorId && edge.followingId === targetId,
+    )
+
+    if (index >= 0) {
+      db.follows.splice(index, 1)
+      return { following: false, stats: statsForUser(targetId) }
+    }
+
+    db.follows.push({
+      followerId: actorId,
+      followingId: targetId,
+      createdAt: nowIso(),
+    })
+
+    pushNotification({
+      userId: targetId,
+      type: 'system',
+      title: '新增关注',
+      body: `${actor.displayName} 关注了你`,
+      actorId,
+    })
+
+    return { following: true, stats: statsForUser(targetId) }
+  },
+
+  listFollowers(userId: string): User[] {
+    const ids = db.follows
+      .filter((edge) => edge.followingId === userId)
+      .map((edge) => edge.followerId)
+    return db.users.filter((user) => ids.includes(user.id)).map((user) => clone(user))
+  },
+
+  listFollowing(userId: string): User[] {
+    const ids = db.follows
+      .filter((edge) => edge.followerId === userId)
+      .map((edge) => edge.followingId)
+    return db.users.filter((user) => ids.includes(user.id)).map((user) => clone(user))
   },
 
   listCategories(): Category[] {

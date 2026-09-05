@@ -110,3 +110,50 @@ export interface CommentInput {
   content: string
   parentId?: string | null
 }
+
+/** 个人主页统计 */
+export interface UserProfileStats {
+  postCount: number
+  /** 帖子赞 + 评论赞 */
+  likeReceivedCount: number
+  followerCount: number
+  followingCount: number
+}
+
+/** 个人动态类型 */
+export type UserActivityType = 'post' | 'comment' | 'like_received' | 'follow'
+
+/** 个人动态条目 */
+export interface UserActivity {
+  id: string
+  userId: string
+  type: UserActivityType
+  createdAt: string
+  title: string
+  body?: string
+  postId?: string | null
+  targetUserId?: string | null
+}
+
+/** 热力图按日计数 */
+export interface HeatmapDay {
+  date: string
+  count: number
+}
+
+/** 关注关系边 */
+export interface FollowEdge {
+  followerId: string
+  followingId: string
+  createdAt: string
+}
+
+/** 个人主页聚合详情 */
+export interface UserProfileDetail {
+  user: User
+  stats: UserProfileStats
+  /** 当前登录用户是否已关注该主页用户 */
+  following: boolean
+  heatmap: HeatmapDay[]
+  activities: UserActivity[]
+}
