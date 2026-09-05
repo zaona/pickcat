@@ -1,8 +1,8 @@
 /**
  * 全局样式入口
  *
- * 仅保留页面级重置与布局间距，不覆盖 PrimeVue / Aura 主题样式。
- * 业务视觉请优先使用 PrimeVue 组件能力。
+ * 仅保留页面级重置与响应式布局间距，不覆盖 PrimeVue / Aura 主题样式。
+ * 业务视觉请优先使用 PrimeVue 组件与 design token。
  */
 
 *,
@@ -21,7 +21,10 @@ body,
 body {
   font-family: var(--p-font-family);
   color: var(--p-text-color);
-  background: var(--p-surface-ground);
+  /* 页面用 surface-50；卡片保持 content.background(surface.0)，靠底色区分层级 */
+  background: var(--p-surface-50);
+  /* 移动端顶/底栏统一高度 */
+  --mobile-bar-height: 4.25rem;
 }
 
 a {
@@ -29,11 +32,63 @@ a {
   text-decoration: none;
 }
 
-/* 布局辅助：仅用于间距与宽度，不定义业务外观 */
+/* 布局辅助：仅用于间距与宽度 */
 .page-container {
-  width: min(960px, 100%);
+  width: min(1120px, 100%);
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
+}
+
+/* 首页：桌面侧栏 + 主列 */
+.home-layout {
+  display: block;
+}
+
+.category-sidebar {
+  width: 12rem;
+  flex-shrink: 0;
+  position: sticky;
+  /* 避开常驻顶栏 */
+  top: 5rem;
+}
+
+.home-main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* 用户主页：左资料 + 右帖子 */
+.profile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.profile-aside {
+  width: 100%;
+}
+
+.profile-main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* 帖子详情：左正文 + 右作者/目录 */
+.post-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.post-main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.post-aside {
+  width: 100%;
 }
 
 .stack-sm {
@@ -46,6 +101,13 @@ a {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+/* 帖子卡片列表：间距略紧于 stack-md */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .row {
@@ -67,4 +129,220 @@ a {
 
 .muted {
   color: var(--p-text-muted-color);
+}
+
+/*
+ * 响应式显隐：作用在外层包裹上，避免被 PrimeVue 组件自身 display 覆盖
+ * 断点：768px
+ */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: block;
+}
+
+/* 桌面顶栏常驻：仅下描边 + 毛玻璃 */
+.desktop-topbar-host {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
+  backdrop-filter: saturate(1.2) blur(14px);
+  -webkit-backdrop-filter: saturate(1.2) blur(14px);
+  border-bottom: 1px solid var(--p-content-border-color);
+}
+
+@media (min-width: 769px) {
+  .home-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  /* 仅桌面：侧栏纵向排布并保留发帖按钮间距 */
+  .desktop-only.category-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .profile-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .profile-aside {
+    width: 16rem;
+    flex-shrink: 0;
+    position: sticky;
+    top: 5rem;
+  }
+
+  .post-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .post-aside {
+    width: 16rem;
+    flex-shrink: 0;
+    position: sticky;
+    top: 5rem;
+  }
+
+  .desktop-only.post-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-only,
+  .desktop-only.category-sidebar,
+  .desktop-only.post-aside,
+  .desktop-only.desktop-topbar-host {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .mobile-topbar-host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
+    backdrop-filter: saturate(1.2) blur(14px);
+    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+    border-bottom: 1px solid var(--p-content-border-color);
+  }
+
+  .mobile-topbar {
+    width: 100%;
+    min-height: var(--mobile-bar-height, 4.25rem);
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
+    backdrop-filter: saturate(1.2) blur(14px);
+    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+    border-top: 1px solid var(--p-content-border-color);
+  }
+
+  .mobile-bottom-nav .p-tabmenu,
+  .mobile-bottom-nav .p-tabmenu-tablist {
+    display: flex;
+    width: 100%;
+    min-height: var(--mobile-bar-height, 4.25rem);
+    background: transparent;
+    border: none;
+  }
+
+  .mobile-bottom-nav .p-tabmenu-item {
+    flex: 1 1 0;
+    margin: 0;
+    border: none;
+  }
+
+  .mobile-bottom-nav .p-tabmenu-item-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 100%;
+    min-height: var(--mobile-bar-height, 4.25rem);
+    box-sizing: border-box;
+    padding: 0.7rem 0.25rem 0.65rem;
+    border: none;
+  }
+
+  .mobile-bottom-nav .p-tabmenu-item-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .mobile-bottom-nav .p-tabmenu-item-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  /* 中间发帖：主题色圆角方块 + 加号（锁定 hover/active 图标色） */
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:hover,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:focus,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:focus-visible,
+  .mobile-bottom-nav .mobile-compose-item.p-tabmenu-item-active .p-tabmenu-item-link,
+  .mobile-bottom-nav .mobile-compose-item.p-tabmenu-item-active .p-tabmenu-item-link:hover {
+    gap: 0;
+    padding: 0.45rem 0.25rem;
+    color: var(--p-primary-contrast-color);
+    background: transparent;
+  }
+
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-icon,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:hover .p-tabmenu-item-icon,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:focus .p-tabmenu-item-icon,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-link:focus-visible .p-tabmenu-item-icon,
+  .mobile-bottom-nav .mobile-compose-item.p-tabmenu-item-active .p-tabmenu-item-icon,
+  .mobile-bottom-nav .mobile-compose-item.p-tabmenu-item-active .p-tabmenu-item-link:hover .p-tabmenu-item-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 2.5rem;
+    /* 连续平滑圆角（squircle），非单纯加大半径 */
+    corner-shape: squircle;
+    background: var(--p-primary-color);
+    /* 压过 TabMenu hover token，避免加号变色 */
+    color: var(--p-primary-contrast-color) !important;
+    font-size: 1.35rem;
+  }
+
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* 底栏用色区分选中态即可，隐藏横向下划线 */
+  .mobile-bottom-nav .p-tabmenu-active-bar {
+    display: none;
+  }
+
+  /*
+   * 移动端内容区边距：避开 fixed 顶/底栏（高度与 --mobile-bar-height 对齐）
+   */
+  .page-container {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+  }
+
+  /* 移动端不显示页面级大标题（帖子正文标题除外） */
+  .page-title {
+    display: none;
+  }
 }
