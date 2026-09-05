@@ -2,7 +2,7 @@
 /**
  * 单条帖子摘要卡片
  *
- * 使用 PrimeVue Card / Tag / Button，点击标题进入详情。
+ * 点击整卡进入详情；作者名单独点击进入用户主页（阻止冒泡）。
  */
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -36,21 +36,17 @@ function openDetail() {
   router.push({ name: 'post-detail', params: { id: props.post.id } })
 }
 
-function openAuthor() {
+function openAuthor(event: Event) {
+  event.stopPropagation()
   if (!props.author) return
   router.push({ name: 'user', params: { id: props.author.id } })
 }
 </script>
 
 <template>
-  <Card>
+  <Card class="post-card" @click="openDetail">
     <template #title>
-      <Button
-        :label="post.title"
-        link
-        class="post-title-btn"
-        @click="openDetail"
-      />
+      <span>{{ post.title }}</span>
     </template>
     <template #subtitle>
       <div class="row-wrap">
@@ -74,27 +70,18 @@ function openAuthor() {
           <i class="pi pi-heart" /> {{ post.likeCount }}
         </span>
         <span class="muted">
+          <i class="pi pi-bookmark" /> {{ post.bookmarkCount }}
+        </span>
+        <span class="muted">
           <i class="pi pi-comments" /> {{ post.commentCount }}
         </span>
-        <div class="grow" />
-        <Button
-          label="查看详情"
-          icon="pi pi-arrow-right"
-          icon-pos="right"
-          size="small"
-          @click="openDetail"
-        />
       </div>
     </template>
   </Card>
 </template>
 
 <style scoped>
-/* 仅调整标题按钮对齐，不覆盖主题色 */
-.post-title-btn {
-  padding: 0;
-  text-align: left;
-  white-space: normal;
-  height: auto;
+.post-card {
+  cursor: pointer;
 }
 </style>

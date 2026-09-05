@@ -2,12 +2,18 @@
 /**
  * 评论树节点（递归）
  *
- * 一级评论与回复共用本组件；回复缩进由父级容器控制。
+ * 支持点赞与回复；回复缩进由父级容器控制。
  */
 import type { CommentNode } from '@/composables/usePostDetail'
 
-defineProps<{
+const props = defineProps<{
   node: CommentNode
+  likingIds?: Set<string>
+}>()
+
+const emit = defineEmits<{
+  like: [commentId: string]
+  reply: [node: CommentNode]
 }>()
 
 function formatTime(iso: string) {
@@ -17,6 +23,10 @@ function formatTime(iso: string) {
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+function isLiking(id: string) {
+  return props.likingIds?.has(id) ?? false
 }
 </script>
 
@@ -37,6 +47,27 @@ function formatTime(iso: string) {
       <template #content>
         <p style="white-space: pre-wrap; margin: 0">{{ node.content }}</p>
       </template>
+      <template #footer>
+        <div class="row-wrap">
+          <Button
+            :label="String(node.likeCount)"
+            :icon="node.liked ? 'pi pi-heart-fill' : 'pi pi-heart'"
+            :severity="node.liked ? 'danger' : 'secondary'"
+            text
+            size="small"
+            :loading="isLiking(node.id)"
+            @click="emit('like', node.id)"
+          />
+          <Button
+            label="回复"
+            icon="pi pi-reply"
+            severity="secondary"
+            text
+            size="small"
+            @click="emit('reply', node)"
+          />
+        </div>
+      </template>
     </Card>
 
     <div v-if="node.children.length" class="comment-replies stack-sm">
@@ -44,6 +75,9 @@ function formatTime(iso: string) {
         v-for="child in node.children"
         :key="child.id"
         :node="child"
+        :liking-ids="likingIds"
+        @like="emit('like', $event)"
+        @reply="emit('reply', $event)"
       />
     </div>
   </div>
