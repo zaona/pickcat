@@ -14,7 +14,8 @@ export async function fetchPosts(query: PostListQuery = {}): Promise<Paginated<P
 
 export async function fetchPostById(id: string): Promise<Post | null> {
   await delay()
-  return mockStore.getPost(id) ?? null
+  // 进入详情即计一次浏览（Mock 会话内累加）
+  return mockStore.recordPostView(id) ?? null
 }
 
 export async function createPost(input: PostInput): Promise<Post> {

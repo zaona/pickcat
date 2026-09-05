@@ -11,8 +11,11 @@
 | 构建 | Vite |
 | 路由 | Vue Router 4 |
 | 状态 | Pinia |
-| UI | [PrimeVue](https://primevue.org/) 4.x（MIT）+ Aura（primary=blue）+ [PrimeIcons](https://primevue.org/icons/) |
+| UI | [PrimeVue](https://primevue.org/) 4.x（MIT）+ Aura |
+| 图标 | [MingCute](https://www.mingcute.com/)（`@mingcute/vue`，默认 Core Regular，激活态 Core Filled） |
 | 数据 | 内存 Mock（`src/mocks` + `src/services`） |
+
+全站 UI 图标统一使用 MingCute，不引入其他图标库或 webfont。通过 `AppIcon` + [`src/icons/registry.ts`](./src/icons/registry.ts) 按需引用；浏览与选型以 [mingcute.com](https://www.mingcute.com/) 为准。
 
 ## 快速开始
 
@@ -44,7 +47,8 @@ pnpm preview
 src/
   layouts/       # 应用壳（顶栏等）
   views/         # 页面视图
-  components/    # 可复用业务组件（内部使用 PrimeVue）
+  components/    # 可复用业务组件（含 AppIcon）
+  icons/         # MingCute 图标名 → 组件注册表
   composables/   # 组合式逻辑
   services/      # 数据访问层（可替换为真实 HTTP）
   mocks/         # Mock 种子数据与内存 Store

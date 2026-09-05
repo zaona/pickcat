@@ -10,8 +10,12 @@ import { useRoute, useRouter } from 'vue-router'
 import type { MenuItem } from 'primevue/menuitem'
 import type Menu from 'primevue/menu'
 
+import AppIcon from '@/components/AppIcon.vue'
+import { iconFilledMap, type IconName } from '@/icons/registry'
 import { useUnreadNotifications } from '@/composables/useUnreadNotifications'
 import { useAuthStore } from '@/stores/auth'
+
+type AppMenuItem = MenuItem & { iconName?: IconName }
 
 const route = useRoute()
 const router = useRouter()
@@ -27,10 +31,10 @@ const desktopItems = computed(() => [
   },
 ])
 
-const userMenuItems = computed<MenuItem[]>(() => [
+const userMenuItems = computed<AppMenuItem[]>(() => [
   {
     label: '我的主页',
-    icon: 'pi pi-user',
+    iconName: 'user',
     command: () => {
       if (auth.currentUser) {
         router.push({ name: 'user', params: { id: auth.currentUser.id } })
@@ -39,32 +43,32 @@ const userMenuItems = computed<MenuItem[]>(() => [
   },
   {
     label: '我的收藏',
-    icon: 'pi pi-bookmark',
+    iconName: 'bookmark',
     command: () => router.push({ name: 'bookmarks' }),
   },
   { separator: true },
   {
     label: '退出登录',
-    icon: 'pi pi-sign-out',
+    iconName: 'signOut',
     command: () => auth.logout(),
   },
 ])
 
-const mobileItems = computed(() => [
+const mobileItems = computed<AppMenuItem[]>(() => [
   {
     label: '首页',
-    icon: 'pi pi-home',
+    iconName: 'home',
     command: () => router.push({ name: 'home' }),
   },
   {
     label: '发帖',
-    icon: 'pi pi-plus',
+    iconName: 'plus',
     class: 'mobile-compose-item',
     command: () => router.push({ name: 'post-create' }),
   },
   {
     label: auth.currentUser ? '我的' : '登录',
-    icon: auth.currentUser ? 'pi pi-user' : 'pi pi-sign-in',
+    iconName: auth.currentUser ? 'user' : 'signIn',
     command: () => {
       if (auth.currentUser) {
         router.push({ name: 'user', params: { id: auth.currentUser.id } })
@@ -103,6 +107,21 @@ function toggleUserMenu(event: Event) {
   userMenu.value?.toggle(event)
 }
 
+function menuIconName(item: MenuItem): IconName | undefined {
+  return (item as AppMenuItem).iconName
+}
+
+function isActiveMobileItem(item: MenuItem) {
+  return mobileItems.value[mobileActiveIndex.value] === item
+}
+
+function mobileNavIconName(item: MenuItem): IconName | undefined {
+  const name = menuIconName(item)
+  if (!name) return undefined
+  if (!isActiveMobileItem(item)) return name
+  return iconFilledMap[name] ?? name
+}
+
 watch(
   () => route.name,
   (name) => {
@@ -127,23 +146,23 @@ watch(
         </template>
         <template #end>
           <div class="row">
-            <Button
-              icon="pi pi-search"
-              text
-              rounded
-              size="large"
-              aria-label="搜索"
-              @click="goSearch"
-            />
+            <Button text rounded size="large" aria-label="搜索" @click="goSearch">
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="search" :class="iconClass" :size="20" />
+              </template>
+            </Button>
             <span class="nav-bell">
               <Button
-                icon="pi pi-bell"
                 text
                 rounded
                 size="large"
                 aria-label="消息中心"
                 @click="goNotifications"
-              />
+              >
+                <template #icon="{ class: iconClass }">
+                  <AppIcon name="bell" :class="iconClass" :size="20" />
+                </template>
+              </Button>
               <Badge
                 v-if="auth.currentUser && unreadCount > 0"
                 :value="unreadLabel"
@@ -165,22 +184,25 @@ watch(
                     shape="circle"
                   />
                   <span>{{ auth.currentUser.displayName }}</span>
-                  <i class="pi pi-angle-down" />
+                  <AppIcon name="chevronDown" :size="16" />
                 </span>
               </Button>
-              <Menu
-                id="user-menu"
-                ref="userMenu"
-                :model="userMenuItems"
-                popup
-              />
+              <Menu id="user-menu" ref="userMenu" :model="userMenuItems" popup>
+                <template #itemicon="{ item, class: iconClass }">
+                  <AppIcon
+                    v-if="menuIconName(item)"
+                    :name="menuIconName(item)!"
+                    :class="iconClass"
+                    :size="16"
+                  />
+                </template>
+              </Menu>
             </template>
-            <Button
-              v-else
-              label="登录"
-              icon="pi pi-sign-in"
-              @click="goLogin"
-            />
+            <Button v-else label="登录" @click="goLogin">
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="signIn" :class="iconClass" :size="16" />
+              </template>
+            </Button>
           </div>
         </template>
       </Menubar>
@@ -200,23 +222,23 @@ watch(
         </template>
         <template #end>
           <div class="row">
-            <Button
-              icon="pi pi-search"
-              text
-              rounded
-              size="large"
-              aria-label="搜索"
-              @click="goSearch"
-            />
+            <Button text rounded size="large" aria-label="搜索" @click="goSearch">
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="search" :class="iconClass" :size="20" />
+              </template>
+            </Button>
             <span class="nav-bell">
               <Button
-                icon="pi pi-bell"
                 text
                 rounded
                 size="large"
                 aria-label="消息中心"
                 @click="goNotifications"
-              />
+              >
+                <template #icon="{ class: iconClass }">
+                  <AppIcon name="bell" :class="iconClass" :size="20" />
+                </template>
+              </Button>
               <Badge
                 v-if="auth.currentUser && unreadCount > 0"
                 :value="unreadLabel"
@@ -234,7 +256,14 @@ watch(
     </main>
 
     <nav class="mobile-only mobile-bottom-nav" aria-label="主导航">
-      <TabMenu :model="mobileItems" :active-index="mobileActiveIndex" />
+      <TabMenu :model="mobileItems" :active-index="mobileActiveIndex">
+        <template #itemicon="{ item, class: iconClass }">
+          <!-- 类名挂在容器上：发帖钮的彩色方块与字形尺寸分离；选中用 Filled -->
+          <span v-if="mobileNavIconName(item)" :class="iconClass">
+            <AppIcon :name="mobileNavIconName(item)!" :size="22" />
+          </span>
+        </template>
+      </TabMenu>
     </nav>
   </div>
 </template>

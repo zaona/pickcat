@@ -8,6 +8,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import PostListItem from '@/components/PostListItem.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { useGlobalSearch } from '@/composables/useGlobalSearch'
 
 const route = useRoute()
@@ -47,7 +48,9 @@ function openUser(id: string) {
     </header>
 
     <IconField>
-      <InputIcon class="pi pi-search" @click="submit" />
+      <InputIcon class="search-icon" @click="submit">
+        <AppIcon name="search" :size="16" />
+      </InputIcon>
       <InputText
         v-model="draft"
         placeholder="搜索帖子或用户"
@@ -126,6 +129,12 @@ function openUser(id: string) {
 </template>
 
 <style scoped>
+.search-icon {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
 /* 结果列表仅保留上边距，左右/底部贴齐 */
 :deep(.p-tabpanels),
 :deep(.p-tabpanel) {

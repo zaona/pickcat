@@ -27,13 +27,14 @@
 ### Category
 
 - `id` / `name` / `description`
-- `icon`：PrimeIcons 类名（如 `pi pi-code`），用于侧栏展示
+- `icon`：MingCute `IconName`（如 `code`），见 `src/icons/registry.ts`，用于侧栏展示
 
 ### Post
 
 - `title` / `content` / `categoryId` / `authorId`
-- 计数：`likeCount` / `commentCount`
+- 计数：`likeCount` / `commentCount` / `bookmarkCount` / `viewCount`
 - 时间：`createdAt` / `updatedAt`
+- 进入详情（`fetchPostById`）时 Mock 会递增 `viewCount`
 
 ### Comment
 

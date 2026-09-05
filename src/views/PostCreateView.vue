@@ -10,6 +10,7 @@ import { useToast } from 'primevue/usetoast'
 
 import { fetchCategories } from '@/services/categoryService'
 import { createPost } from '@/services/postService'
+import AppIcon from '@/components/AppIcon.vue'
 import { useAuthStore } from '@/stores/auth'
 import type { Category } from '@/types'
 
@@ -93,7 +94,11 @@ async function submit() {
 
     <div v-if="!auth.currentUser" class="stack-sm">
       <Message severity="warn" :closable="false">当前未登录，发帖前请先选择身份。</Message>
-      <Button label="去登录" icon="pi pi-sign-in" @click="router.push({ name: 'login' })" />
+      <Button label="去登录" @click="router.push({ name: 'login' })">
+        <template #icon="{ class: iconClass }">
+          <AppIcon name="signIn" :class="iconClass" :size="16" />
+        </template>
+      </Button>
     </div>
 
     <Card>
@@ -144,11 +149,14 @@ async function submit() {
             <div class="grow" />
             <Button
               label="发布"
-              icon="pi pi-check"
               :loading="submitting"
               :disabled="!auth.currentUser"
               @click="submit"
-            />
+            >
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="check" :class="iconClass" :size="16" />
+              </template>
+            </Button>
           </div>
         </div>
       </template>

@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
 
 import { fetchUsers } from '@/services/userService'
+import AppIcon from '@/components/AppIcon.vue'
 import { useAuthStore } from '@/stores/auth'
 import type { User } from '@/types'
 
@@ -103,19 +104,22 @@ function logout() {
           </Select>
 
           <div class="row-wrap">
-            <Button
-              label="确认登录"
-              icon="pi pi-sign-in"
-              @click="confirmLogin"
-            />
+            <Button label="确认登录" @click="confirmLogin">
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="signIn" :class="iconClass" :size="16" />
+              </template>
+            </Button>
             <Button
               v-if="auth.currentUser"
               label="退出登录"
-              icon="pi pi-sign-out"
               severity="secondary"
               outlined
               @click="logout"
-            />
+            >
+              <template #icon="{ class: iconClass }">
+                <AppIcon name="signOut" :class="iconClass" :size="16" />
+              </template>
+            </Button>
           </div>
         </div>
       </template>

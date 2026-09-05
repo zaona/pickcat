@@ -273,7 +273,9 @@ a {
   }
 
   .mobile-bottom-nav .p-tabmenu-item-icon {
-    font-size: 1.35rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     line-height: 1;
   }
 
@@ -314,6 +316,13 @@ a {
     /* 压过 TabMenu hover token，避免加号变色 */
     color: var(--p-primary-contrast-color) !important;
     font-size: 1.35rem;
+  }
+
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-icon .app-icon,
+  .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    color: inherit;
   }
 
   .mobile-bottom-nav .mobile-compose-item .p-tabmenu-item-label {

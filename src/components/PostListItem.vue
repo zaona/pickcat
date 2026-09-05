@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { Category, Post, User } from '@/types'
+import AppIcon from '@/components/AppIcon.vue'
 
 const props = defineProps<{
   post: Post
@@ -66,14 +67,17 @@ function openAuthor(event: Event) {
     </template>
     <template #footer>
       <div class="row-wrap">
-        <span class="muted">
-          <i class="pi pi-heart" /> {{ post.likeCount }}
+        <span class="muted meta-stat">
+          <AppIcon name="eye" :size="14" /> {{ post.viewCount }}
         </span>
-        <span class="muted">
-          <i class="pi pi-bookmark" /> {{ post.bookmarkCount }}
+        <span class="muted meta-stat">
+          <AppIcon name="heart" :size="14" /> {{ post.likeCount }}
         </span>
-        <span class="muted">
-          <i class="pi pi-comments" /> {{ post.commentCount }}
+        <span class="muted meta-stat">
+          <AppIcon name="bookmark" :size="14" /> {{ post.bookmarkCount }}
+        </span>
+        <span class="muted meta-stat">
+          <AppIcon name="comments" :size="14" /> {{ post.commentCount }}
         </span>
       </div>
     </template>
@@ -83,5 +87,11 @@ function openAuthor(event: Event) {
 <style scoped>
 .post-card {
   cursor: pointer;
+}
+
+.meta-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 </style>

@@ -3,7 +3,7 @@
  *
  * - Aura 预设 + primary 映射为 blue（PrimeUI 蓝色系）
  * - 使用 MIT 许可的 PrimeVue 4.x（无需 PrimeUI License Key）
- * - 按需全局注册常用组件；图标使用 PrimeIcons（pi pi-*）
+ * - 按需全局注册常用组件；图标统一走 MingCute（AppIcon）
  */
 import type { App } from 'vue'
 

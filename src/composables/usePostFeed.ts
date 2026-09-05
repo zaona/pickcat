@@ -9,6 +9,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { fetchCategories } from '@/services/categoryService'
 import { fetchPosts } from '@/services/postService'
 import { fetchUsers } from '@/services/userService'
+import type { IconName } from '@/icons/registry'
 import type { Category, FeedSort, Post, User } from '@/types'
 
 export const feedSortOptions: { label: string; value: FeedSort }[] = [
@@ -30,7 +31,11 @@ export function usePostFeed() {
   const sort = ref<FeedSort>('latest')
 
   const categoryOptions = computed(() => [
-    { label: '全部', value: null as string | null, icon: 'pi pi-th-large' },
+    {
+      label: '全部',
+      value: null as string | null,
+      icon: 'grid' as IconName,
+    },
     ...categories.value.map((item) => ({
       label: item.name,
       value: item.id,

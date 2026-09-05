@@ -5,6 +5,7 @@
  * 支持点赞与回复；回复缩进由父级容器控制。
  */
 import type { CommentNode } from '@/composables/usePostDetail'
+import AppIcon from '@/components/AppIcon.vue'
 
 const props = defineProps<{
   node: CommentNode
@@ -51,21 +52,31 @@ function isLiking(id: string) {
         <div class="row-wrap">
           <Button
             :label="String(node.likeCount)"
-            :icon="node.liked ? 'pi pi-heart-fill' : 'pi pi-heart'"
             :severity="node.liked ? 'danger' : 'secondary'"
             text
             size="small"
             :loading="isLiking(node.id)"
             @click="emit('like', node.id)"
-          />
+          >
+            <template #icon="{ class: iconClass }">
+              <AppIcon
+                :name="node.liked ? 'heartFilled' : 'heart'"
+                :class="iconClass"
+                :size="14"
+              />
+            </template>
+          </Button>
           <Button
             label="回复"
-            icon="pi pi-reply"
             severity="secondary"
             text
             size="small"
             @click="emit('reply', node)"
-          />
+          >
+            <template #icon="{ class: iconClass }">
+              <AppIcon name="reply" :class="iconClass" :size="14" />
+            </template>
+          </Button>
         </div>
       </template>
     </Card>

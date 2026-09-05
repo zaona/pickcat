@@ -139,6 +139,7 @@ export const mockStore = {
       if (query.sort === 'hot') {
         if (b.likeCount !== a.likeCount) return b.likeCount - a.likeCount
         if (b.commentCount !== a.commentCount) return b.commentCount - a.commentCount
+        if (b.viewCount !== a.viewCount) return b.viewCount - a.viewCount
       }
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
@@ -155,6 +156,14 @@ export const mockStore = {
     return post ? clone(post) : undefined
   },
 
+  /** 记录一次浏览并返回更新后的帖子 */
+  recordPostView(id: string): Post | undefined {
+    const post = db.posts.find((item) => item.id === id)
+    if (!post) return undefined
+    post.viewCount += 1
+    return clone(post)
+  },
+
   createPost(input: PostInput): Post {
     const timestamp = nowIso()
     const post: Post = {
@@ -166,6 +175,7 @@ export const mockStore = {
       likeCount: 0,
       commentCount: 0,
       bookmarkCount: 0,
+      viewCount: 0,
       createdAt: timestamp,
       updatedAt: timestamp,
     }

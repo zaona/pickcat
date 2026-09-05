@@ -8,6 +8,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import PostListItem from '@/components/PostListItem.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { fetchCategories } from '@/services/categoryService'
 import { fetchPosts } from '@/services/postService'
 import { fetchUserById } from '@/services/userService'
@@ -70,11 +71,11 @@ watch(userId, () => void load(), { immediate: true })
 
     <div v-else-if="!user" class="stack-sm">
       <Message severity="error" :closable="false">未找到该用户。</Message>
-      <Button
-        label="返回首页"
-        icon="pi pi-home"
-        @click="router.push({ name: 'home' })"
-      />
+      <Button label="返回首页" @click="router.push({ name: 'home' })">
+        <template #icon="{ class: iconClass }">
+          <AppIcon name="home" :class="iconClass" :size="16" />
+        </template>
+      </Button>
     </div>
 
     <div v-else class="profile-layout">

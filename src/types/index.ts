@@ -4,6 +4,8 @@
  * 与 Mock / services 层共享；接入真实后端时，请保持字段语义兼容。
  */
 
+import type { IconName } from '@/icons/registry'
+
 /** 社区用户 */
 export interface User {
   id: string
@@ -23,8 +25,8 @@ export interface Category {
   id: string
   name: string
   description: string
-  /** PrimeIcons 类名，如 pi pi-code */
-  icon: string
+  /** MingCute IconName，见 src/icons/registry.ts */
+  icon: IconName
 }
 
 /** 帖子 */
@@ -37,6 +39,8 @@ export interface Post {
   likeCount: number
   commentCount: number
   bookmarkCount: number
+  /** 浏览量 */
+  viewCount: number
   createdAt: string
   updatedAt: string
 }

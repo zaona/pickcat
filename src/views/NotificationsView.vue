@@ -13,6 +13,8 @@ import {
   markAllNotificationsRead,
   markNotificationRead,
 } from '@/services/notificationService'
+import AppIcon from '@/components/AppIcon.vue'
+import type { IconName } from '@/icons/registry'
 import { useUnreadNotifications } from '@/composables/useUnreadNotifications'
 import { useAuthStore } from '@/stores/auth'
 import type { Notification, NotificationType } from '@/types'
@@ -29,11 +31,11 @@ const markingAll = ref(false)
 const items = ref<Notification[]>([])
 const activeTab = ref<NoticeTab>('all')
 
-const typeIcon: Record<NotificationType, string> = {
-  comment: 'pi pi-comment',
-  reply: 'pi pi-comments',
-  like: 'pi pi-heart',
-  system: 'pi pi-info-circle',
+const typeIcon: Record<NotificationType, IconName> = {
+  comment: 'comment',
+  reply: 'comments',
+  like: 'heart',
+  system: 'info',
 }
 
 const tabOptions: { label: string; value: NoticeTab }[] = [
@@ -147,11 +149,11 @@ watch(
       <Message severity="warn" :closable="false">
         登录后可查看点赞、评论与系统通知。
       </Message>
-      <Button
-        label="去登录"
-        icon="pi pi-sign-in"
-        @click="router.push({ name: 'login' })"
-      />
+      <Button label="去登录" @click="router.push({ name: 'login' })">
+        <template #icon="{ class: iconClass }">
+          <AppIcon name="signIn" :class="iconClass" :size="16" />
+        </template>
+      </Button>
     </div>
 
     <template v-else>
@@ -159,12 +161,15 @@ watch(
         <span class="muted">未读 {{ unreadCount }} 条</span>
         <Button
           label="全部已读"
-          icon="pi pi-check"
           text
           :disabled="unreadCount === 0"
           :loading="markingAll"
           @click="markAll"
-        />
+        >
+          <template #icon="{ class: iconClass }">
+            <AppIcon name="check" :class="iconClass" :size="16" />
+          </template>
+        </Button>
       </div>
 
       <Tabs v-model:value="activeTab">
@@ -193,6 +198,7 @@ watch(
                 v-else-if="filteredItems.length === 0"
                 severity="secondary"
                 :closable="false"
+                :pt="{ transition: { appear: false } }"
               >
                 该分类暂无消息。
               </Message>
@@ -202,12 +208,22 @@ watch(
                   v-for="item in filteredItems"
                   :key="item.id"
                   class="notice-card"
-                  :class="{ 'is-unread': !item.read }"
                   @click="openItem(item)"
                 >
                   <template #content>
                     <div class="row" style="align-items: flex-start">
-                      <i :class="[typeIcon[item.type], 'notice-icon']" />
+                      <span class="notice-icon-wrap">
+                        <AppIcon
+                          :name="typeIcon[item.type]"
+                          class="notice-icon"
+                          :size="18"
+                        />
+                        <span
+                          v-if="!item.read"
+                          class="notice-dot"
+                          aria-label="未读"
+                        />
+                      </span>
                       <div
                         class="stack-sm grow"
                         style="gap: 0.25rem; min-width: 0"
@@ -223,7 +239,6 @@ watch(
                         </div>
                         <p class="muted" style="margin: 0">{{ item.body }}</p>
                       </div>
-                      <Badge v-if="!item.read" value="新" severity="danger" />
                     </div>
                   </template>
                 </Card>
@@ -243,17 +258,35 @@ watch(
   padding: 0.5rem 0 0;
 }
 
+/* 空态 Message 在隐藏 Tab 内挂载时勿播入场动画，避免切换时被裁切再展开 */
+:deep(.p-message-enter-active) {
+  animation: none;
+  overflow: visible;
+}
+
 .notice-card {
   cursor: pointer;
 }
 
-.notice-card.is-unread {
-  background: color-mix(in srgb, var(--p-primary-color) 6%, var(--p-content-background));
+.notice-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
 }
 
 .notice-icon {
-  font-size: 1.25rem;
   color: var(--p-primary-color);
-  margin-top: 0.15rem;
+}
+
+.notice-dot {
+  position: absolute;
+  top: -0.1rem;
+  right: -0.1rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--p-red-500, #ef4444);
+  pointer-events: none;
 }
 </style>

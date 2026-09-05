@@ -9,6 +9,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import CommentThread from '@/components/CommentThread.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { commentSortOptions, usePostDetail } from '@/composables/usePostDetail'
 
 interface TocItem {
@@ -181,11 +182,11 @@ function scrollToSection(id: string) {
       <Message severity="error" :closable="false">
         未找到该帖子，可能已被删除或 ID 无效。
       </Message>
-      <Button
-        label="返回首页"
-        icon="pi pi-home"
-        @click="router.push({ name: 'home' })"
-      />
+      <Button label="返回首页" @click="router.push({ name: 'home' })">
+        <template #icon="{ class: iconClass }">
+          <AppIcon name="home" :class="iconClass" :size="16" />
+        </template>
+      </Button>
     </div>
 
     <div v-else class="post-layout">
@@ -238,34 +239,55 @@ function scrollToSection(id: string) {
             <div class="row-wrap">
               <Button
                 :label="liked ? `已赞 ${post.likeCount}` : `点赞 ${post.likeCount}`"
-                :icon="liked ? 'pi pi-heart-fill' : 'pi pi-heart'"
                 :loading="liking"
                 :severity="liked ? 'danger' : 'secondary'"
                 outlined
                 @click="toggleLike"
-              />
+              >
+                <template #icon="{ class: iconClass }">
+                  <AppIcon
+                    :name="liked ? 'heartFilled' : 'heart'"
+                    :class="iconClass"
+                    :size="16"
+                  />
+                </template>
+              </Button>
               <Button
                 :label="
                   bookmarked
                     ? `已收藏 ${post.bookmarkCount}`
                     : `收藏 ${post.bookmarkCount}`
                 "
-                :icon="bookmarked ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
                 :loading="bookmarking"
                 :severity="bookmarked ? 'warn' : 'secondary'"
                 outlined
                 @click="toggleBookmark"
-              />
+              >
+                <template #icon="{ class: iconClass }">
+                  <AppIcon
+                    :name="bookmarked ? 'bookmarkFilled' : 'bookmark'"
+                    :class="iconClass"
+                    :size="16"
+                  />
+                </template>
+              </Button>
               <Button
                 label="分享"
-                icon="pi pi-share-alt"
                 :loading="sharing"
                 severity="secondary"
                 outlined
                 @click="sharePost"
-              />
-              <span class="muted">
-                <i class="pi pi-comments" /> {{ post.commentCount }} 条评论
+              >
+                <template #icon="{ class: iconClass }">
+                  <AppIcon name="share" :class="iconClass" :size="16" />
+                </template>
+              </Button>
+              <span class="muted comment-count">
+                <AppIcon name="eye" :size="14" /> {{ post.viewCount }} 次浏览
+              </span>
+              <span class="muted comment-count">
+                <AppIcon name="comments" :size="14" /> {{ post.commentCount }}
+                条评论
               </span>
             </div>
           </template>
@@ -274,8 +296,8 @@ function scrollToSection(id: string) {
         <Divider />
 
         <section id="post-comments" class="stack-md">
-          <div class="row-wrap" style="justify-content: space-between">
-            <h2 style="margin: 0; font-size: 1.25rem">评论</h2>
+          <div class="comments-heading row-wrap">
+            <h2 class="comments-title">评论</h2>
             <SelectButton
               v-model="commentSort"
               :options="commentSortOptions"
@@ -318,10 +340,13 @@ function scrollToSection(id: string) {
                   <div class="grow" />
                   <Button
                     :label="replyTarget ? '提交回复' : '提交评论'"
-                    icon="pi pi-send"
                     :loading="submitting"
                     @click="submitComment"
-                  />
+                  >
+                    <template #icon="{ class: iconClass }">
+                      <AppIcon name="send" :class="iconClass" :size="16" />
+                    </template>
+                  </Button>
                 </div>
               </div>
             </template>
@@ -394,6 +419,23 @@ function scrollToSection(id: string) {
 <style scoped>
 .author-card {
   cursor: pointer;
+}
+
+.comment-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.comments-heading {
+  justify-content: space-between;
+}
+
+.comments-title {
+  margin: 0;
+  font-size: 1.25rem;
+  /* 与下方 Card 标题左右内边距对齐 */
+  padding-inline-start: 1.125rem;
 }
 
 .post-title {

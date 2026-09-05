@@ -6,6 +6,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import PostListItem from '@/components/PostListItem.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { fetchCategories } from '@/services/categoryService'
 import { fetchBookmarkedPosts } from '@/services/postService'
 import { fetchUsers } from '@/services/userService'
@@ -76,11 +77,11 @@ watch(
       <Message severity="warn" :closable="false">
         登录后可查看收藏的帖子。
       </Message>
-      <Button
-        label="去登录"
-        icon="pi pi-sign-in"
-        @click="router.push({ name: 'login' })"
-      />
+      <Button label="去登录" @click="router.push({ name: 'login' })">
+        <template #icon="{ class: iconClass }">
+          <AppIcon name="signIn" :class="iconClass" :size="16" />
+        </template>
+      </Button>
     </div>
 
     <template v-else>

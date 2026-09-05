@@ -8,6 +8,7 @@
 import { useRouter } from 'vue-router'
 
 import PostListItem from '@/components/PostListItem.vue'
+import AppIcon from '@/components/AppIcon.vue'
 import { feedSortOptions, usePostFeed } from '@/composables/usePostFeed'
 
 const router = useRouter()
@@ -49,7 +50,7 @@ function goCreate() {
           :aria-selected="selectedCategoryId === option.value"
           @click="selectedCategoryId = option.value"
         >
-          <i :class="option.icon" />
+          <AppIcon :name="option.icon" :size="16" />
           <span>{{ option.label }}</span>
         </button>
       </div>
@@ -133,7 +134,7 @@ function goCreate() {
         >
           <template #option="{ option }">
             <span class="category-option">
-              <i :class="option.icon" />
+              <AppIcon :name="option.icon" :size="16" />
               <span>{{ option.label }}</span>
             </span>
           </template>
