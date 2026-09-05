@@ -1,6 +1,6 @@
 # Mock 数据说明
 
-本文档说明 PickCat 社区前端的本地 Mock 方案，以及如何扩展 / 替换为真实 API。
+本文档说明 PICKCAT 社区前端的本地 Mock 方案，以及如何扩展 / 替换为真实 API。
 
 ## 设计目标
 
@@ -27,6 +27,7 @@
 ### Category
 
 - `id` / `name` / `description`
+- `icon`：PrimeIcons 类名（如 `pi pi-code`），用于侧栏展示
 
 ### Post
 

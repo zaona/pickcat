@@ -1,4 +1,4 @@
-# PickCat 社区前端
+# PICKCAT 社区前端
 
 基于 **Vue 3 + Vite + TypeScript + PrimeVue（Aura）** 的社区前端 MVP。  
 全部数据走本地 Mock，服务层接口与真实 API 对齐，便于后续替换。
@@ -11,7 +11,7 @@
 | 构建 | Vite |
 | 路由 | Vue Router 4 |
 | 状态 | Pinia |
-| UI | [PrimeVue](https://primevue.org/) 4.x（MIT）+ Aura 主题 + PrimeIcons |
+| UI | [PrimeVue](https://primevue.org/) 4.x（MIT）+ Aura（primary=blue）+ [PrimeIcons](https://primevue.org/icons/) |
 | 数据 | 内存 Mock（`src/mocks` + `src/services`） |
 
 ## 快速开始
