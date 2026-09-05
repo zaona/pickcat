@@ -11,7 +11,6 @@ import { mockStore } from './mocks/store'
 import { setupPrimeVue } from './plugins/primevue'
 import { router } from './router'
 import { useAuthStore } from './stores/auth'
-import 'primeicons/primeicons.css'
 import './style.css'
 
 const app = createApp(App)

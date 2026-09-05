@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mingcute/vue':
+        specifier: ^3.0.2
+        version: 3.0.2(vue@3.5.42(typescript@6.0.3))
       '@primeuix/themes':
         specifier: ^3.0.0
         version: 3.0.0
@@ -17,9 +20,6 @@ importers:
       pinia:
         specifier: ^2.3.1
         version: 2.3.1(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))
-      primeicons:
-        specifier: ^8.0.0
-        version: 8.0.0
       primevue:
         specifier: 4.5.5
         version: 4.5.5(vue@3.5.42(typescript@6.0.3))
@@ -70,6 +70,14 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.6.0':
     resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
+
+  '@mingcute/icons@3.0.2':
+    resolution: {integrity: sha512-NuDZuZy0B/MmrdoVVOodOURS1qPqgcdSHFPKSG9gPEF6/dr0+zm5pfJs0U7Yta5jjoCdX0WZcVbZOov2tMMPTA==}
+
+  '@mingcute/vue@3.0.2':
+    resolution: {integrity: sha512-4OIdY5qMvyXV0NmVDzY+xtPNe2LSLWrUdVtCv/XoWolb7xn1D1t7XjRp5Wo46d7z1LCotutJMMfY07faStPQmA==}
+    peerDependencies:
+      vue: ^3.5.0
 
   '@oxc-project/types@0.148.0':
     resolution: {integrity: sha512-Nm4s/jB+4FpFsPhWGEC4h7rzksesmtnMXomo6rCMcg/b8zLQuOziRgkCS1fxDCXOlJB/6Q8oABOZ/OP6RIPj9A==}
@@ -410,9 +418,6 @@ packages:
     resolution: {integrity: sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  primeicons@8.0.0:
-    resolution: {integrity: sha512-eZGk+Mgb4fE+LkJi9LvllbnB4RVUF9kzmnLVnT3ZMY6stqKVh7TUJ0mFoMNIEgTnJSvhaGcJotDiSvtVvkHd7g==}
-
   primevue@4.5.5:
     resolution: {integrity: sha512-Kv5REIewCdP806QaoU+4nBXfmpzOGFKkZ9qH4KsL6MjiAQVc4PUzypt8erl4r3Vzh3nr3aWZIxkxYRRsLGiX2A==}
     engines: {node: '>=12.11.0'}
@@ -530,6 +535,13 @@ snapshots:
       '@babel/helper-validator-identifier': 7.29.7
 
   '@jridgewell/sourcemap-codec@1.6.0': {}
+
+  '@mingcute/icons@3.0.2': {}
+
+  '@mingcute/vue@3.0.2(vue@3.5.42(typescript@6.0.3))':
+    dependencies:
+      '@mingcute/icons': 3.0.2
+      vue: 3.5.42(typescript@6.0.3)
 
   '@oxc-project/types@0.148.0': {}
 
@@ -804,8 +816,6 @@ snapshots:
       nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  primeicons@8.0.0: {}
 
   primevue@4.5.5(vue@3.5.42(typescript@6.0.3)):
     dependencies:
