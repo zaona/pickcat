@@ -153,14 +153,15 @@ a {
   display: block;
 }
 
-/* 桌面顶栏常驻：仅下描边 + 毛玻璃 */
+/* 桌面顶栏常驻：仅下描边 + 毛玻璃
+ * 注意：勿写多段 filter 函数（如 saturate() blur()），部分 CSS 压缩器会去掉空格导致整段失效 */
 .desktop-topbar-host {
   position: sticky;
   top: 0;
   z-index: 60;
   background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
-  backdrop-filter: saturate(1.2) blur(14px);
-  -webkit-backdrop-filter: saturate(1.2) blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--p-content-border-color);
 }
 
@@ -228,8 +229,8 @@ a {
     right: 0;
     z-index: 60;
     background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
-    backdrop-filter: saturate(1.2) blur(14px);
-    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--p-content-border-color);
   }
 
@@ -249,8 +250,8 @@ a {
     bottom: 0;
     z-index: 60;
     background: color-mix(in srgb, var(--p-content-background) 72%, transparent);
-    backdrop-filter: saturate(1.2) blur(14px);
-    -webkit-backdrop-filter: saturate(1.2) blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     border-top: 1px solid var(--p-content-border-color);
   }
 
