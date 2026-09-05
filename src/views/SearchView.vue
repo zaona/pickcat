@@ -92,7 +92,7 @@ function openUser(id: string) {
             </div>
           </TabPanel>
           <TabPanel value="1">
-            <div class="stack-md">
+            <div class="stack-sm">
               <Message
                 v-if="users.length === 0"
                 severity="secondary"

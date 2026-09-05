@@ -32,7 +32,7 @@ function isLiking(id: string) {
 </script>
 
 <template>
-  <div class="stack-sm">
+  <div class="comment-thread">
     <Card>
       <template #subtitle>
         <div class="row-wrap">
@@ -81,7 +81,7 @@ function isLiking(id: string) {
       </template>
     </Card>
 
-    <div v-if="node.children.length" class="comment-replies stack-sm">
+    <div v-if="node.children.length" class="comment-replies">
       <CommentThread
         v-for="child in node.children"
         :key="child.id"
@@ -95,10 +95,26 @@ function isLiking(id: string) {
 </template>
 
 <style scoped>
+.comment-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-card);
+}
+
 /* 仅用于回复层级缩进 */
 .comment-replies {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-card);
   margin-left: 1.25rem;
   padding-left: 0.75rem;
   border-left: 2px solid var(--p-content-border-color);
+}
+
+@media (max-width: 768px) {
+  .comment-replies {
+    margin-left: 0.85rem;
+    padding-left: 0.55rem;
+  }
 }
 </style>

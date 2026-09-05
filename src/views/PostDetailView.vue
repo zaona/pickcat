@@ -96,7 +96,7 @@ function scrollToSection(id: string) {
 <template>
   <section class="stack-md">
     <div v-if="loading" class="post-layout">
-      <div class="post-main stack-md">
+      <div class="post-main stack-sm">
         <!-- 移动端作者卡骨架 -->
         <div class="mobile-only">
           <Card>
@@ -191,7 +191,7 @@ function scrollToSection(id: string) {
 
     <div v-else class="post-layout">
       <!-- 左：标题 + 正文 + 评论 -->
-      <div class="post-main stack-md">
+      <div class="post-main stack-sm">
         <!-- 移动端作者信息 -->
         <div v-if="author" class="mobile-only">
           <Card class="author-card" @click="openAuthor">
@@ -295,7 +295,7 @@ function scrollToSection(id: string) {
 
         <Divider />
 
-        <section id="post-comments" class="stack-md">
+        <section id="post-comments" class="stack-sm">
           <div class="comments-heading row-wrap">
             <h2 class="comments-title">评论</h2>
             <SelectButton
@@ -360,7 +360,7 @@ function scrollToSection(id: string) {
             还没有评论，来抢沙发吧。
           </Message>
 
-          <div v-else class="stack-md">
+          <div v-else class="stack-sm">
             <CommentThread
               v-for="node in commentTree"
               :key="node.id"

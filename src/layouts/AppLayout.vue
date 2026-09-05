@@ -146,21 +146,27 @@ watch(
         </template>
         <template #end>
           <div class="row">
-            <Button text rounded size="large" aria-label="搜索" @click="goSearch">
+            <Button
+              text
+              rounded
+              class="nav-icon-btn"
+              aria-label="搜索"
+              @click="goSearch"
+            >
               <template #icon="{ class: iconClass }">
-                <AppIcon name="search" :class="iconClass" :size="20" />
+                <AppIcon name="search" :class="iconClass" :size="24" />
               </template>
             </Button>
             <span class="nav-bell">
               <Button
                 text
                 rounded
-                size="large"
+                class="nav-icon-btn"
                 aria-label="消息中心"
                 @click="goNotifications"
               >
                 <template #icon="{ class: iconClass }">
-                  <AppIcon name="bell" :class="iconClass" :size="20" />
+                  <AppIcon name="bell" :class="iconClass" :size="24" />
                 </template>
               </Button>
               <Badge
@@ -222,21 +228,27 @@ watch(
         </template>
         <template #end>
           <div class="row">
-            <Button text rounded size="large" aria-label="搜索" @click="goSearch">
+            <Button
+              text
+              rounded
+              class="nav-icon-btn"
+              aria-label="搜索"
+              @click="goSearch"
+            >
               <template #icon="{ class: iconClass }">
-                <AppIcon name="search" :class="iconClass" :size="20" />
+                <AppIcon name="search" :class="iconClass" :size="24" />
               </template>
             </Button>
             <span class="nav-bell">
               <Button
                 text
                 rounded
-                size="large"
+                class="nav-icon-btn"
                 aria-label="消息中心"
                 @click="goNotifications"
               >
                 <template #icon="{ class: iconClass }">
-                  <AppIcon name="bell" :class="iconClass" :size="20" />
+                  <AppIcon name="bell" :class="iconClass" :size="24" />
                 </template>
               </Button>
               <Badge
@@ -284,6 +296,17 @@ watch(
   width: auto;
 }
 
+/* 顶栏搜索 / 消息：加大图标与点击区域 */
+.nav-icon-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+}
+
+.nav-icon-btn :deep(.p-button-icon) {
+  font-size: 1.5rem;
+}
+
 /* 未读角标贴铃铛图标右上角，避免 OverlayBadge 跑到大按钮外缘 */
 .nav-bell {
   position: relative;
@@ -294,8 +317,8 @@ watch(
 
 .nav-bell-badge {
   position: absolute;
-  top: 0.45rem;
-  right: 0.4rem;
+  top: 0.35rem;
+  right: 0.3rem;
   min-width: 1rem;
   height: 1rem;
   font-size: 0.65rem;

@@ -25,6 +25,10 @@ body {
   background: var(--p-surface-50);
   /* 移动端顶/底栏统一高度 */
   --mobile-bar-height: 4.25rem;
+  /* 卡片之间小间距（个人主页信息卡 ↔ 热力图等同此值） */
+  --gap-card: 0.75rem;
+  /* 区块 / 主栏大间距 */
+  --gap-section: 1.25rem;
 }
 
 a {
@@ -71,7 +75,7 @@ a {
 .profile-layout {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--gap-section);
   align-items: stretch;
 }
 
@@ -88,7 +92,7 @@ a {
 .post-layout {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--gap-section);
   align-items: stretch;
 }
 
@@ -104,33 +108,33 @@ a {
 .stack-sm {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--gap-card);
 }
 
 .stack-md {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--gap-section);
 }
 
-/* 帖子卡片列表：间距略紧于 stack-md */
+/* 卡片列表小间距（与 stack-sm / --gap-card 一致） */
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--gap-card);
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--gap-card);
 }
 
 .row-wrap {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--gap-card);
 }
 
 .grow {
@@ -169,14 +173,14 @@ a {
   .home-layout {
     display: flex;
     align-items: flex-start;
-    gap: 1.25rem;
+    gap: var(--gap-section);
   }
 
   /* 仅桌面：侧栏纵向排布并保留发帖按钮间距 */
   .desktop-only.category-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--gap-card);
   }
 
   .profile-layout {
@@ -206,7 +210,7 @@ a {
   .desktop-only.post-aside {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--gap-card);
   }
 }
 
