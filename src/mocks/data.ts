@@ -4,7 +4,7 @@
  * 仅作为内存 Store 的初始快照；运行期变更不会写回本文件。
  * 扩展数据时请保持 id 唯一，时间字段使用 ISO 8601。
  */
-import type { Category, Comment, Post, User } from '@/types'
+import type { Category, Comment, Notification, Post, User } from '@/types'
 
 export const seedUsers: User[] = [
   {
@@ -42,21 +42,25 @@ export const seedCategories: Category[] = [
     id: 'c1',
     name: '技术讨论',
     description: '框架、工程化、性能等技术话题',
+    icon: 'pi pi-code',
   },
   {
     id: 'c2',
     name: '经验分享',
     description: '踩坑记录、最佳实践与学习路径',
+    icon: 'pi pi-book',
   },
   {
     id: 'c3',
     name: '闲聊水贴',
     description: '轻松交流、提问与灌水',
+    icon: 'pi pi-comments',
   },
   {
     id: 'c4',
     name: '求职招聘',
     description: '岗位信息、面试经验与求职互助',
+    icon: 'pi pi-briefcase',
   },
 ]
 
@@ -70,6 +74,7 @@ export const seedPosts: Post[] = [
     authorId: 'u1',
     likeCount: 12,
     commentCount: 3,
+    bookmarkCount: 5,
     createdAt: '2026-08-20T03:00:00.000Z',
     updatedAt: '2026-08-20T03:00:00.000Z',
   },
@@ -82,6 +87,7 @@ export const seedPosts: Post[] = [
     authorId: 'u2',
     likeCount: 8,
     commentCount: 2,
+    bookmarkCount: 3,
     createdAt: '2026-08-22T06:20:00.000Z',
     updatedAt: '2026-08-22T06:20:00.000Z',
   },
@@ -93,6 +99,7 @@ export const seedPosts: Post[] = [
     authorId: 'u3',
     likeCount: 5,
     commentCount: 1,
+    bookmarkCount: 1,
     createdAt: '2026-08-25T11:10:00.000Z',
     updatedAt: '2026-08-25T11:10:00.000Z',
   },
@@ -105,6 +112,7 @@ export const seedPosts: Post[] = [
     authorId: 'u4',
     likeCount: 15,
     commentCount: 2,
+    bookmarkCount: 7,
     createdAt: '2026-08-28T02:40:00.000Z',
     updatedAt: '2026-08-28T02:40:00.000Z',
   },
@@ -117,6 +125,7 @@ export const seedPosts: Post[] = [
     authorId: 'u1',
     likeCount: 9,
     commentCount: 0,
+    bookmarkCount: 4,
     createdAt: '2026-09-01T08:00:00.000Z',
     updatedAt: '2026-09-01T08:00:00.000Z',
   },
@@ -128,6 +137,7 @@ export const seedPosts: Post[] = [
     authorId: 'u2',
     likeCount: 4,
     commentCount: 1,
+    bookmarkCount: 2,
     createdAt: '2026-09-02T09:30:00.000Z',
     updatedAt: '2026-09-02T09:30:00.000Z',
   },
@@ -139,6 +149,7 @@ export const seedPosts: Post[] = [
     authorId: 'u3',
     likeCount: 2,
     commentCount: 0,
+    bookmarkCount: 0,
     createdAt: '2026-09-03T01:15:00.000Z',
     updatedAt: '2026-09-03T01:15:00.000Z',
   },
@@ -150,6 +161,7 @@ export const seedPosts: Post[] = [
     authorId: 'u4',
     likeCount: 6,
     commentCount: 1,
+    bookmarkCount: 2,
     createdAt: '2026-09-04T04:50:00.000Z',
     updatedAt: '2026-09-04T04:50:00.000Z',
   },
@@ -162,6 +174,7 @@ export const seedComments: Comment[] = [
     authorId: 'u2',
     content: '同意，服务层抽象很关键。',
     parentId: null,
+    likeCount: 4,
     createdAt: '2026-08-20T04:00:00.000Z',
   },
   {
@@ -170,6 +183,7 @@ export const seedComments: Comment[] = [
     authorId: 'u3',
     content: 'Aura 主题默认观感已经够用了。',
     parentId: null,
+    likeCount: 6,
     createdAt: '2026-08-20T05:10:00.000Z',
   },
   {
@@ -178,6 +192,7 @@ export const seedComments: Comment[] = [
     authorId: 'u1',
     content: '是的，后续再考虑主题定制。',
     parentId: 'cm2',
+    likeCount: 2,
     createdAt: '2026-08-20T05:30:00.000Z',
   },
   {
@@ -186,6 +201,7 @@ export const seedComments: Comment[] = [
     authorId: 'u1',
     content: '我们也是这么拆的，迁移成本很低。',
     parentId: null,
+    likeCount: 3,
     createdAt: '2026-08-22T07:00:00.000Z',
   },
   {
@@ -194,6 +210,7 @@ export const seedComments: Comment[] = [
     authorId: 'u4',
     content: '再加一层 DTO 映射会更稳。',
     parentId: null,
+    likeCount: 1,
     createdAt: '2026-08-22T08:20:00.000Z',
   },
   {
@@ -202,6 +219,7 @@ export const seedComments: Comment[] = [
     authorId: 'u4',
     content: 'MVP 范围认同，通知可以放到第二期。',
     parentId: null,
+    likeCount: 2,
     createdAt: '2026-08-25T12:00:00.000Z',
   },
   {
@@ -210,6 +228,7 @@ export const seedComments: Comment[] = [
     authorId: 'u1',
     content: '还可以问 pinia 与 provide/inject 的取舍。',
     parentId: null,
+    likeCount: 5,
     createdAt: '2026-08-28T03:10:00.000Z',
   },
   {
@@ -218,6 +237,7 @@ export const seedComments: Comment[] = [
     authorId: 'u2',
     content: '性能相关：v-memo、异步组件也常问。',
     parentId: null,
+    likeCount: 3,
     createdAt: '2026-08-28T03:40:00.000Z',
   },
   {
@@ -226,6 +246,7 @@ export const seedComments: Comment[] = [
     authorId: 'u3',
     content: '文档先行 +1',
     parentId: null,
+    likeCount: 1,
     createdAt: '2026-09-02T10:00:00.000Z',
   },
   {
@@ -234,6 +255,99 @@ export const seedComments: Comment[] = [
     authorId: 'u1',
     content: '已收藏，感谢分享。',
     parentId: null,
+    likeCount: 0,
     createdAt: '2026-09-04T05:20:00.000Z',
+  },
+]
+
+/** 消息中心种子（按接收者 userId 过滤） */
+export const seedNotifications: Notification[] = [
+  {
+    id: 'n1',
+    userId: 'u1',
+    type: 'comment',
+    title: '收到新评论',
+    body: 'Bob 评论了你的帖子「Vue 3 + PrimeVue 搭建社区前端的心得」',
+    postId: 'p1',
+    actorId: 'u2',
+    read: false,
+    createdAt: '2026-08-20T04:05:00.000Z',
+  },
+  {
+    id: 'n2',
+    userId: 'u1',
+    type: 'reply',
+    title: '收到新回复',
+    body: 'Cara 在你的帖子下发表了看法',
+    postId: 'p1',
+    actorId: 'u3',
+    read: false,
+    createdAt: '2026-08-20T05:15:00.000Z',
+  },
+  {
+    id: 'n3',
+    userId: 'u1',
+    type: 'like',
+    title: '帖子被点赞',
+    body: 'Dan 赞了你的帖子「PrimeVue DataView 做信息流的小技巧」',
+    postId: 'p5',
+    actorId: 'u4',
+    read: true,
+    createdAt: '2026-09-01T09:00:00.000Z',
+  },
+  {
+    id: 'n4',
+    userId: 'u2',
+    type: 'comment',
+    title: '收到新评论',
+    body: 'Alice 评论了你的帖子「如何组织 Mock 数据层才方便以后换 API？」',
+    postId: 'p2',
+    actorId: 'u1',
+    read: false,
+    createdAt: '2026-08-22T07:05:00.000Z',
+  },
+  {
+    id: 'n5',
+    userId: 'u2',
+    type: 'system',
+    title: '欢迎来到 PICKCAT',
+    body: '消息中心已上线：点赞、评论与系统通知会汇总在这里。',
+    postId: null,
+    actorId: null,
+    read: true,
+    createdAt: '2026-08-01T00:00:00.000Z',
+  },
+  {
+    id: 'n6',
+    userId: 'u3',
+    type: 'like',
+    title: '帖子被点赞',
+    body: 'Alice 赞了你的帖子「周末有人一起讨论社区产品功能优先级吗？」',
+    postId: 'p3',
+    actorId: 'u1',
+    read: false,
+    createdAt: '2026-08-25T12:30:00.000Z',
+  },
+  {
+    id: 'n7',
+    userId: 'u4',
+    type: 'comment',
+    title: '收到新评论',
+    body: 'Alice 评论了你的帖子「内推：寻找熟悉 Vue3 的同学」',
+    postId: 'p8',
+    actorId: 'u1',
+    read: false,
+    createdAt: '2026-09-04T05:25:00.000Z',
+  },
+  {
+    id: 'n8',
+    userId: 'u1',
+    type: 'system',
+    title: '系统提示',
+    body: '收藏与分享已可用，试试把喜欢的帖子收进收藏夹。',
+    postId: null,
+    actorId: null,
+    read: false,
+    createdAt: '2026-09-05T01:00:00.000Z',
   },
 ]

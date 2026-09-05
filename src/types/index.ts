@@ -23,6 +23,8 @@ export interface Category {
   id: string
   name: string
   description: string
+  /** PrimeIcons 类名，如 pi pi-code */
+  icon: string
 }
 
 /** 帖子 */
@@ -34,6 +36,7 @@ export interface Post {
   authorId: string
   likeCount: number
   commentCount: number
+  bookmarkCount: number
   createdAt: string
   updatedAt: string
 }
@@ -45,8 +48,29 @@ export interface Comment {
   authorId: string
   content: string
   parentId: string | null
+  likeCount: number
   createdAt: string
 }
+
+/** 通知类型 */
+export type NotificationType = 'comment' | 'reply' | 'like' | 'system'
+
+/** 消息中心通知 */
+export interface Notification {
+  id: string
+  /** 接收者 */
+  userId: string
+  type: NotificationType
+  title: string
+  body: string
+  postId?: string | null
+  actorId?: string | null
+  read: boolean
+  createdAt: string
+}
+
+/** 列表排序：最新 / 最热 */
+export type FeedSort = 'latest' | 'hot'
 
 /** 列表查询参数 */
 export interface PostListQuery {
@@ -55,6 +79,8 @@ export interface PostListQuery {
   page?: number
   pageSize?: number
   authorId?: string
+  /** 默认 latest */
+  sort?: FeedSort
 }
 
 /** 分页结果 */

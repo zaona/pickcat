@@ -24,12 +24,34 @@ export async function createPost(input: PostInput): Promise<Post> {
 
 export async function togglePostLike(
   postId: string,
+  actorId?: string | null,
 ): Promise<{ post: Post; liked: boolean } | null> {
   await delay(160)
-  return mockStore.toggleLike(postId) ?? null
+  return mockStore.toggleLike(postId, actorId) ?? null
 }
 
 export async function fetchPostLiked(postId: string): Promise<boolean> {
   await delay(80)
   return mockStore.isLiked(postId)
+}
+
+export async function togglePostBookmark(
+  userId: string,
+  postId: string,
+): Promise<{ post: Post; bookmarked: boolean } | null> {
+  await delay(160)
+  return mockStore.toggleBookmark(userId, postId) ?? null
+}
+
+export async function fetchPostBookmarked(
+  userId: string,
+  postId: string,
+): Promise<boolean> {
+  await delay(80)
+  return mockStore.isBookmarked(userId, postId)
+}
+
+export async function fetchBookmarkedPosts(userId: string): Promise<Post[]> {
+  await delay()
+  return mockStore.listBookmarkedPosts(userId)
 }
