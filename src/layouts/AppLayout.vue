@@ -64,6 +64,14 @@ function goProfile() {
                 <span>{{ auth.currentUser.displayName }}</span>
               </span>
             </Button>
+            <Button
+              icon="pi pi-sign-out"
+              severity="secondary"
+              text
+              rounded
+              aria-label="退出登录"
+              @click="auth.logout()"
+            />
           </template>
           <Button
             v-else
