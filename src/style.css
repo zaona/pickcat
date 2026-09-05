@@ -32,6 +32,16 @@ a {
   text-decoration: none;
 }
 
+/*
+ * 默认关闭 Message 入场动画，避免空态/Tab 切换时「裁切再展开」。
+ * 需要动画时：给 Message 加 class="message-animated"
+ *   <Message class="message-animated" ... />
+ */
+.p-message-enter-active:not(.message-animated) {
+  animation: none !important;
+  overflow: visible !important;
+}
+
 /* 布局辅助：仅用于间距与宽度 */
 .page-container {
   width: min(1120px, 100%);
@@ -174,7 +184,7 @@ a {
   }
 
   .profile-aside {
-    width: 16rem;
+    width: 20rem;
     flex-shrink: 0;
     position: sticky;
     top: 5rem;

@@ -198,7 +198,6 @@ watch(
                 v-else-if="filteredItems.length === 0"
                 severity="secondary"
                 :closable="false"
-                :pt="{ transition: { appear: false } }"
               >
                 该分类暂无消息。
               </Message>
@@ -256,12 +255,6 @@ watch(
 :deep(.p-tabpanels),
 :deep(.p-tabpanel) {
   padding: 0.5rem 0 0;
-}
-
-/* 空态 Message 在隐藏 Tab 内挂载时勿播入场动画，避免切换时被裁切再展开 */
-:deep(.p-message-enter-active) {
-  animation: none;
-  overflow: visible;
 }
 
 .notice-card {
