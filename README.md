@@ -11,7 +11,7 @@
 | 构建 | Vite |
 | 路由 | Vue Router 4 |
 | 状态 | Pinia |
-| UI | [PrimeVue](https://primevue.org/) + Aura 主题 + PrimeIcons |
+| UI | [PrimeVue](https://primevue.org/) 4.x（MIT）+ Aura 主题 + PrimeIcons |
 | 数据 | 内存 Mock（`src/mocks` + `src/services`） |
 
 ## 快速开始

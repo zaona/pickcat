@@ -2,6 +2,7 @@
  * PrimeVue 插件注册
  *
  * - 使用 Aura 主题预设（@primeuix/themes），业务侧不自定义主题色板
+ * - 使用 MIT 许可的 PrimeVue 4.x（无需 PrimeUI License Key）
  * - 按需全局注册常用组件，页面可直接使用标签而无需重复 import
  * - 注册 Toast / Confirm 等服务组件所需的插件
  */
