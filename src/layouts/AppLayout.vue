@@ -296,21 +296,35 @@ watch(
   width: auto;
 }
 
-/* 顶栏搜索 / 消息：加大图标与点击区域 */
+/* 顶栏搜索 / 消息：加大图标；锁定正方形，避免 Menubar/Toolbar 纵向拉伸变形 */
 .nav-icon-btn {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-self: center;
   width: 2.75rem;
   height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  max-width: 2.75rem;
+  max-height: 2.75rem;
   padding: 0;
+  aspect-ratio: 1;
 }
 
-.nav-icon-btn :deep(.p-button-icon) {
+.nav-icon-btn :deep(.p-button-icon),
+.nav-icon-btn :deep(.app-icon) {
+  width: 1.5rem;
+  height: 1.5rem;
   font-size: 1.5rem;
+  line-height: 1;
 }
 
 /* 未读角标贴铃铛图标右上角，避免 OverlayBadge 跑到大按钮外缘 */
 .nav-bell {
   position: relative;
   display: inline-flex;
+  flex: 0 0 auto;
+  align-self: center;
   align-items: center;
   justify-content: center;
 }
